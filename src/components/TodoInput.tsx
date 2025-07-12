@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TextInput, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 
 interface TodoInputProps {
   text: string;
@@ -9,71 +9,25 @@ interface TodoInputProps {
 
 export const TodoInput: React.FC<TodoInputProps> = ({ text, onTextChange, onAdd }) => {
   return (
-    <View style={styles.container}>
+    <View className="flex-row mb-5 gap-2.5">
       <TextInput
         placeholder="新しいTodoを入力してください..."
         value={text}
         onChangeText={onTextChange}
-        style={styles.input}
+        className="flex-1 border-2 border-gray-200 rounded-xl p-4 text-base bg-white shadow-sm"
         placeholderTextColor="#999"
       />
       <TouchableOpacity
-        style={[styles.button, !text.trim() && styles.buttonDisabled]}
+        className={`rounded-xl px-6 py-4 justify-center items-center shadow-sm ${
+          !text.trim()
+            ? 'bg-gray-300'
+            : 'bg-blue-500 shadow-blue-500/30'
+        }`}
         onPress={onAdd}
         disabled={!text.trim()}
       >
-        <Text style={styles.buttonText}>追加</Text>
+        <Text className="text-white text-base font-semibold">追加</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    marginBottom: 20,
-    gap: 10,
-  },
-  input: {
-    flex: 1,
-    borderWidth: 2,
-    borderColor: '#e1e5e9',
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 16,
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  button: {
-    backgroundColor: '#007AFF',
-    borderRadius: 12,
-    paddingHorizontal: 24,
-    paddingVertical: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#007AFF',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.3,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  buttonDisabled: {
-    backgroundColor: '#ccc',
-    shadowOpacity: 0,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '600',
-  },
-});

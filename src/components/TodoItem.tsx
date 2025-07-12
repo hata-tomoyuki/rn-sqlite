@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 
 interface TodoItemProps {
   id: number;
@@ -9,55 +9,16 @@ interface TodoItemProps {
 
 export const TodoItem: React.FC<TodoItemProps> = ({ id, text, onDelete }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.content}>
-        <Text style={styles.text}>{text}</Text>
+    <View className="flex-row bg-white rounded-xl p-4 mb-3 items-center shadow-sm">
+      <View className="flex-1">
+        <Text className="text-base text-gray-800 leading-6">{text}</Text>
       </View>
       <TouchableOpacity
-        style={styles.deleteButton}
+        className="bg-red-500 rounded-lg px-3 py-1.5 ml-3"
         onPress={() => onDelete(id)}
       >
-        <Text style={styles.deleteText}>削除</Text>
+        <Text className="text-white text-sm font-medium">削除</Text>
       </TouchableOpacity>
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    backgroundColor: '#fff',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 12,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.1,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  content: {
-    flex: 1,
-  },
-  text: {
-    fontSize: 16,
-    color: '#333',
-    lineHeight: 24,
-  },
-  deleteButton: {
-    backgroundColor: '#FF3B30',
-    borderRadius: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    marginLeft: 12,
-  },
-  deleteText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: '500',
-  },
-});

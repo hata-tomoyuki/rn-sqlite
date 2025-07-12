@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, StatusBar, ActivityIndicator } from 'react-native';
+import { View, StatusBar, ActivityIndicator } from 'react-native';
 import { TodoInput } from './src/components/TodoInput';
 import { TodoList } from './src/components/TodoList';
 import { useTodoDatabase } from './src/hooks/useTodoDatabase';
+import "./global.css"
 
 export default function App() {
   const [text, setText] = useState('');
@@ -23,16 +24,16 @@ export default function App() {
 
   if (loading) {
     return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#007AFF" />
+      <View className="flex-1 justify-center items-center bg-gray-50">
+        <ActivityIndicator size="large" color="#3B82F6" />
       </View>
     );
   }
 
   return (
-    <View style={styles.container}>
-      <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
-      <View style={styles.content}>
+    <View className="flex-1 bg-gray-50">
+      <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
+      <View className="flex-1 p-5">
         <TodoInput
           text={text}
           onTextChange={setText}
@@ -46,20 +47,3 @@ export default function App() {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f8f9fa',
-  },
-  content: {
-    flex: 1,
-    padding: 20,
-  },
-  loadingContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f8f9fa',
-  },
-});
