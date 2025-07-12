@@ -14,7 +14,7 @@ interface TodoListProps {
 
 export const TodoList: React.FC<TodoListProps> = ({ todos, onDelete }) => {
   const renderEmptyList = () => (
-    <View className="flex-1 justify-center items-center py-15">
+    <View className="justify-center items-center py-15">
       <Text className="text-lg font-semibold text-gray-600 mb-2">Todoがありません</Text>
       <Text className="text-sm text-gray-500 text-center">新しいTodoを追加してみましょう！</Text>
     </View>
