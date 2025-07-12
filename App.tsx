@@ -1,53 +1,65 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Text, TextInput, View, FlatList } from 'react-native';
-import * as SQLite from 'expo-sqlite';
+import React, { useState } from 'react';
+import { View, StyleSheet, StatusBar, ActivityIndicator } from 'react-native';
+import { TodoInput } from './src/components/TodoInput';
+import { TodoList } from './src/components/TodoList';
+import { useTodoDatabase } from './src/hooks/useTodoDatabase';
 
 export default function App() {
-  const [db, setDb] = useState<SQLite.SQLiteDatabase | null>(null);
-  const [todos, setTodos] = useState<{ id: number; text: string }[]>([]);
   const [text, setText] = useState('');
+  const { todos, loading, addTodo, deleteTodo } = useTodoDatabase();
 
-  // DB 初期化
-  useEffect(() => {
-    (async () => {
-      const database = await SQLite.openDatabaseAsync('todo.db');
-      await database.execAsync(
-        'CREATE TABLE IF NOT EXISTS todos (id INTEGER PRIMARY KEY AUTOINCREMENT, text TEXT);'
-      );
-      setDb(database);
-      await fetchTodos(database);
-    })();
-  }, []);
-
-  // Todo 取得
-  const fetchTodos = async (database = db) => {
-    if (!database) return;
-    const rows = await database.getAllAsync<{ id: number; text: string }>('SELECT * FROM todos;');
-    setTodos(rows);
+  const handleAddTodo = async () => {
+    if (text.trim()) {
+      const success = await addTodo(text);
+      if (success) {
+        setText('');
+      }
+    }
   };
 
-  // Todo 追加
-  const addTodo = async () => {
-    if (!text || !db) return;
-    await db.runAsync('INSERT INTO todos (text) VALUES (?);', text);
-    setText('');
-    await fetchTodos();
+  const handleDeleteTodo = async (id: number) => {
+    await deleteTodo(id);
   };
+
+  if (loading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#007AFF" />
+      </View>
+    );
+  }
 
   return (
-    <View style={{ flex: 1, padding: 20 }}>
-      <TextInput
-        placeholder="新しいTodoを入力"
-        value={text}
-        onChangeText={setText}
-        style={{ borderWidth: 1, borderColor: '#ccc', padding: 10, marginBottom: 10 }}
-      />
-      <Button title="追加" onPress={addTodo} />
-      <FlatList
-        data={todos}
-        keyExtractor={(item) => item.id.toString()}
-        renderItem={({ item }) => <Text style={{ padding: 10 }}>{item.text}</Text>}
-      />
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" backgroundColor="#f8f9fa" />
+      <View style={styles.content}>
+        <TodoInput
+          text={text}
+          onTextChange={setText}
+          onAdd={handleAddTodo}
+        />
+        <TodoList
+          todos={todos}
+          onDelete={handleDeleteTodo}
+        />
+      </View>
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f8f9fa',
+  },
+  content: {
+    flex: 1,
+    padding: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
+  },
+});
