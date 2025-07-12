@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, FlatList } from 'react-native';
+import { View, Text, FlatList, Image } from 'react-native';
 import { TodoItem } from './TodoItem';
 
 interface Todo {
@@ -23,7 +23,6 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onDelete, onUpdate })
 
   return (
     <View className="flex-1">
-      <Text className="text-2xl font-bold text-gray-800 mb-4 text-center">Todoリスト</Text>
       <FlatList
         data={todos}
         keyExtractor={(item) => item.id.toString()}
