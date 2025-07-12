@@ -1,14 +1,22 @@
 import React from 'react';
 import { View, TextInput, TouchableOpacity, Text } from 'react-native';
 
+/**
+ * TodoInputコンポーネントのProps型定義
+ */
 interface TodoInputProps {
-  text: string;
-  onTextChange: (text: string) => void;
-  onAdd: () => void;
-  onCancel?: () => void;
-  showCancelButton?: boolean;
+  text: string;                    // 入力テキスト
+  onTextChange: (text: string) => void;  // テキスト変更時のコールバック
+  onAdd: () => void;              // 追加ボタンクリック時のコールバック
+  onCancel?: () => void;          // キャンセルボタンクリック時のコールバック（オプション）
+  showCancelButton?: boolean;     // キャンセルボタンの表示フラグ（オプション）
 }
 
+/**
+ * Todo入力フォームコンポーネント
+ * 新しいTodoの入力と追加機能を提供
+ * モーダル内でも使用可能
+ */
 export const TodoInput: React.FC<TodoInputProps> = ({
   text,
   onTextChange,
@@ -18,6 +26,7 @@ export const TodoInput: React.FC<TodoInputProps> = ({
 }) => {
   return (
     <View className="gap-4">
+      {/* テキスト入力フィールド */}
       <TextInput
         placeholder="新しいTodoを入力してください..."
         value={text}
@@ -27,7 +36,10 @@ export const TodoInput: React.FC<TodoInputProps> = ({
         multiline
         numberOfLines={3}
       />
+
+      {/* ボタンエリア */}
       <View className="flex-row gap-3">
+        {/* キャンセルボタン（条件付き表示） */}
         {showCancelButton && onCancel && (
           <TouchableOpacity
             className="flex-1 bg-gray-300 rounded-xl py-4 justify-center items-center"
@@ -36,6 +48,8 @@ export const TodoInput: React.FC<TodoInputProps> = ({
             <Text className="text-gray-700 text-base font-semibold">キャンセル</Text>
           </TouchableOpacity>
         )}
+
+        {/* 追加ボタン */}
         <TouchableOpacity
           className={`rounded-xl py-4 justify-center items-center ${
             showCancelButton ? 'flex-1' : 'w-full'
