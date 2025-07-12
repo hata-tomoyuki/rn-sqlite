@@ -10,9 +10,10 @@ interface Todo {
 interface TodoListProps {
   todos: Todo[];
   onDelete: (id: number) => void;
+  onUpdate: (id: number, text: string) => void;
 }
 
-export const TodoList: React.FC<TodoListProps> = ({ todos, onDelete }) => {
+export const TodoList: React.FC<TodoListProps> = ({ todos, onDelete, onUpdate }) => {
   const renderEmptyList = () => (
     <View className="justify-center items-center py-15">
       <Text className="text-lg font-semibold text-gray-600 mb-2">Todoがありません</Text>
@@ -31,6 +32,7 @@ export const TodoList: React.FC<TodoListProps> = ({ todos, onDelete }) => {
             id={item.id}
             text={item.text}
             onDelete={onDelete}
+            onUpdate={onUpdate}
           />
         )}
         ListEmptyComponent={renderEmptyList}

@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { View, StatusBar, ActivityIndicator, Image, Text } from 'react-native';
 import { TodoInput } from './src/components/TodoInput';
 import { TodoList } from './src/components/TodoList';
+import { TodoSearch } from './src/components/TodoSearch';
 import { useTodoDatabase } from './src/hooks/useTodoDatabase';
 import "./global.css"
 
 export default function App() {
   const [text, setText] = useState('');
-  const { todos, loading, addTodo, deleteTodo } = useTodoDatabase();
+  const [searchText, setSearchText] = useState('');
+  const { todos, loading, addTodo, updateTodo, deleteTodo, searchTodos } = useTodoDatabase();
 
   const handleAddTodo = async () => {
     if (text.trim()) {
@@ -20,6 +22,15 @@ export default function App() {
 
   const handleDeleteTodo = async (id: number) => {
     await deleteTodo(id);
+  };
+
+  const handleUpdateTodo = async (id: number, newText: string) => {
+    await updateTodo(id, newText);
+  };
+
+  const handleSearchChange = (searchValue: string) => {
+    setSearchText(searchValue);
+    searchTodos(searchValue);
   };
 
   if (loading) {
@@ -51,12 +62,18 @@ export default function App() {
             onTextChange={setText}
             onAdd={handleAddTodo}
           />
+
+          <TodoSearch
+            searchText={searchText}
+            onSearchChange={handleSearchChange}
+          />
+
           <TodoList
             todos={todos}
             onDelete={handleDeleteTodo}
+            onUpdate={handleUpdateTodo}
           />
         </View>
-
       </View>
     </View>
   );

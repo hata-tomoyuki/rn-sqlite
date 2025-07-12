@@ -55,6 +55,19 @@ export const useTodoDatabase = () => {
     }
   };
 
+  // Todo 編集
+  const updateTodo = async (id: number, text: string) => {
+    if (!text.trim() || !db) return false;
+    try {
+      await db.runAsync('UPDATE todos SET text = ? WHERE id = ?;', text.trim(), id);
+      await fetchTodos();
+      return true;
+    } catch (error) {
+      console.error('Todo編集エラー:', error);
+      return false;
+    }
+  };
+
   // Todo 削除
   const deleteTodo = async (id: number) => {
     if (!db) return false;
@@ -68,10 +81,30 @@ export const useTodoDatabase = () => {
     }
   };
 
+  // Todo 検索
+  const searchTodos = async (searchText: string) => {
+    if (!db) return;
+    try {
+      if (!searchText.trim()) {
+        await fetchTodos();
+        return;
+      }
+      const rows = await db.getAllAsync<Todo>(
+        'SELECT * FROM todos WHERE text LIKE ? ORDER BY id DESC;',
+        `%${searchText.trim()}%`
+      );
+      setTodos(rows);
+    } catch (error) {
+      console.error('Todo検索エラー:', error);
+    }
+  };
+
   return {
     todos,
     loading,
     addTodo,
+    updateTodo,
     deleteTodo,
+    searchTodos,
   };
 };
